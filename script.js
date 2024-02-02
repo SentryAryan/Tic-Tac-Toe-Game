@@ -78,6 +78,61 @@ function checkGameOver() {
     }
   });
 
+  function checkGameOver() {
+    winningPositions.forEach((position) => {
+      // if all winning combination boxes have O or all winning combination boxes
+      // have X means if position 0's element = position 1's element = position 2's
+      // element
+      if (
+        gameGrid[position[0]] !== "" &&
+        gameGrid[position[1]] !== "" &&
+        gameGrid[position[2]] !== "" &&
+        gameGrid[position[0]] === gameGrid[position[1]] &&
+        gameGrid[position[1]] === gameGrid[position[2]]
+      ) {
+        // add green background to each winning position box
+        position.forEach((pos) => {
+          boxes[pos].classList.add("win");
+        });
+
+        // make every box unclickabe since game has finished with win outcome
+        boxes.forEach((box) => {
+          box.style.pointerEvents = "none";
+        });
+
+        // update UI and display winner's name
+        gameInfo.innerText = `Winner Player - ${gameGrid[position[0]]}`;
+
+        // make new game button visible since game has finished with win outcome
+        newGameBtn.classList.add("active");
+      }
+    });
+
+    // check if new buuton already has class active means win condition is achieved
+    // so no need to check game tied so return
+    if (newGameBtn.classList.contains("active")) {
+      return;
+    }
+
+    // if we reach here meaning the no winning combination has all X or all O means no win
+    // now check if all boxes are filled if yes then game is tied since winning condition
+    // is also not reached
+    let fillCount = 0;
+    gameGrid.forEach((box) => {
+      if (box !== "") {
+        fillCount++;
+      }
+    });
+
+    // fillCount = 9 indicates all boxes are filled
+    if (fillCount === 9) {
+      // Update the UI that game has tied
+      gameInfo.innerText = "Game Tied !";
+      // display new game button since game has finished
+      newGameBtn.classList.add("active");
+    }
+  }
+
   // if we reach here meaning the no winning combination has all X or all O means no win
   // now check if all boxes are filled if yes then game is tied since winning condition
   // is also not reached
